@@ -1,83 +1,90 @@
-import React, { useState, useEffect, useContext } from 'react';
-import api from '../services/api';
-import { useSearchParams } from 'react-router-dom';
-import { AuthContext } from '../context/authContext';
-import { toast } from 'react-toastify';
+// src/pages/Booking.jsx
+import React, { useEffect, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 const Booking = () => {
   const [searchParams] = useSearchParams();
-  const roomId = searchParams.get('roomId');
-
-  const { user } = useContext(AuthContext);
-
   const [room, setRoom] = useState(null);
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const fetchRoom = async () => {
-    try {
-      const { data } = await api.get(`/rooms/${roomId}`);
-      setRoom(data);
-    } catch (err) {
-      toast.error('Failed to fetch room');
-    }
-    setLoading(false);
-  };
+  const roomId = searchParams.get("roomId");
 
   useEffect(() => {
-    if (roomId) fetchRoom();
-    else setLoading(false);
+    const fetchRoom = async () => {
+      try {
+        if (!roomId) {
+          setLoading(false);
+          return;
+        }
+        const res = await api.get(`/rooms/${roomId}`);
+
+        // ✅ handle both possible response structures
+        const roomData = res.data?.data || res.data;
+        console.log("Room API response:", res.data);
+
+        setRoom(roomData);
+      } catch (error) {
+        console.error("Error fetching room:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRoom();
   }, [roomId]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!checkIn || !checkOut) {
-      return toast.error('Please select check-in and check-out dates');
-    }
+  const handleBooking = async () => {
     try {
-      await api.post('/bookings', {
-        room: roomId,
-        checkIn,
-        checkOut,
+      if (!roomId) {
+        alert("No room selected.");
+        return;
+      }
+
+      const res = await api.post("/bookings", {
+        roomId,
+        checkIn: new Date(),
+        checkOut: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 night default
       });
-      toast.success('Booking successful');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Booking failed');
+
+      if (res.data) {
+        const bookingData = res.data?.data || res.data;
+        console.log("Booking created:", bookingData);
+
+        // ✅ Redirect to checkout with bookingId
+        navigate(`/checkout?bookingId=${bookingData._id}`);
+      }
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      alert("Failed to create booking. Please try again.");
     }
   };
 
-  if (loading) return <p className="p-8">Loading booking...</p>;
-  if (!room) return <p className="p-8">No room selected</p>;
+  if (loading) return <p>Loading room details...</p>;
+  if (!roomId) return <p>No room selected.</p>;
+  if (!room) return <p>Room not found.</p>;
 
   return (
-    <div className="p-8 max-w-lg mx-auto">
-      <h2 className="text-3xl font-bold mb-6">Book Room: {room.type}</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-1">Check-In</label>
-          <input
-            type="date"
-            value={checkIn}
-            onChange={e => setCheckIn(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Check-Out</label>
-          <input
-            type="date"
-            value={checkOut}
-            onChange={e => setCheckOut(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          Confirm Booking
-        </button>
-      </form>
+    <div>
+      <h1>Booking Page</h1>
+      <h2>{room.roomType}</h2>
+      <p>Price: RM{room.price}</p>
+      <p>{room.description}</p>
+
+      <button
+        onClick={handleBooking}
+        style={{
+          marginTop: "20px",
+          padding: "10px 15px",
+          backgroundColor: "#16a34a",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+        }}
+      >
+        Confirm Booking
+      </button>
     </div>
   );
 };

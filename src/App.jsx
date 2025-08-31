@@ -14,6 +14,11 @@ import { ToastContainer } from 'react-toastify';
 import ErrorBoundary from './components/errorBoundary';
 import 'react-toastify/dist/ReactToastify.css';
 
+// ✅ Import new payment pages
+import Checkout from './pages/checkout';
+import Success from './pages/success';
+import Cancel from './pages/cancel';
+
 // ProtectedRoute component
 function ProtectedRoute({ children, adminOnly = false }) {
   const { user, loading } = React.useContext(AuthContext);
@@ -60,6 +65,16 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <Checkout />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/success" element={<Success />} />
+              <Route path="/cancel" element={<Cancel />} />
               <Route
                 path="/dashboard/user"
                 element={
