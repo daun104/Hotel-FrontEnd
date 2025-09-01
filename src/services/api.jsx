@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
-  baseURL: "https://hotel-booking-f1ei.onrender.com/api/v1",
+  baseURL: API_BASE_URL || "https://hotel-booking-ar5z.onrender.com/api/v1",
   headers: {
     "Content-Type": "application/json",
   },

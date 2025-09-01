@@ -55,9 +55,10 @@ const Booking = () => {
         navigate(`/checkout?bookingId=${bookingData._id}`);
       }
     } catch (error) {
-      console.error("Error creating booking:", error);
-      alert("Failed to create booking. Please try again.");
-    }
+  console.error("Error creating booking:", error.response?.data || error.message);
+  alert("Failed to create booking. Please try again.");
+}
+
   };
 
   if (loading) return <p>Loading room details...</p>;
