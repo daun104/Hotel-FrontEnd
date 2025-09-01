@@ -41,19 +41,17 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-primary tracking-wide font-serif">
-            K<span className="text-yellow-400">&</span>A Grand Resort
-          </h1>
-          <div className="space-x-2">
-            <Button variant="outline" onClick={() => navigate("/login")}>
-              Sign In
-            </Button>
-            <Button onClick={() => navigate("/booking")}>Book Now</Button>
-          </div>
-        </div>
-      </header>
+<header className="border-b">
+  <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <h1 className="text-3xl md:text-4xl font-extrabold text-primary tracking-wide font-serif">
+      K<span className="text-yellow-400">&</span>A Grand Resort
+    </h1>
+    <div>
+      <Button onClick={() => navigate("/rooms")}>Book Now</Button>
+    </div>
+  </div>
+</header>
+
 
       {/* Hero Section */}
       <section className="relative h-96 bg-gradient-to-r from-blue-600 to-purple-600">
@@ -170,7 +168,7 @@ const HomePage = () => {
                       </div>
                       <Button
                         className="w-full mt-3"
-                        onClick={() => navigate("/booking")}
+                        onClick={() => navigate(`/booking?roomId=${room._id}`)}
                         disabled={!room.isAvailable}
                         variant={room.isAvailable ? "default" : "secondary"}
                       >
