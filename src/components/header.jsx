@@ -17,7 +17,6 @@ const header = ({ isDark, setIsDark }) => {
         <nav className="space-x-4">
           <Link to="/">Home</Link>
           <Link to="/rooms">Rooms</Link>
-          {user && user.role === 'user' && <Link to="/booking">Booking</Link>}
           {user && user.role === 'user' && <Link to="/dashboard/user">Dashboard</Link>}
           {user && user.role === 'admin' && <Link to="/dashboard/admin">Admin</Link>}
           {!user && <Link to="/login">Login</Link>}

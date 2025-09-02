@@ -5,7 +5,6 @@ import HomePage from './pages/homePage';
 import Login from './pages/login';
 import Register from './pages/register';
 import Rooms from './pages/rooms';
-import Booking from './pages/booking';
 import UserDashboard from './pages/dashboard/user';
 import AdminDashboard from './pages/dashboard/admin';
 import Header from './components/header';
@@ -14,10 +13,11 @@ import { ToastContainer } from 'react-toastify';
 import ErrorBoundary from './components/errorBoundary';
 import 'react-toastify/dist/ReactToastify.css';
 
-// ✅ Import new payment pages
+// ✅ Import new pages
 import Checkout from './pages/checkout';
 import Success from './pages/success';
 import Cancel from './pages/cancel';
+import AddRoomPage from './pages/dashboard/AddRoomPage'; // <-- new page
 
 // ProtectedRoute component
 function ProtectedRoute({ children, adminOnly = false }) {
@@ -31,12 +31,10 @@ function ProtectedRoute({ children, adminOnly = false }) {
 }
 
 function App() {
-  // Dark mode state
   const [isDark, setIsDark] = useState(
     localStorage.getItem('darkMode') === 'true' || false
   );
 
-  // Apply dark mode class to <html> on mount and whenever it changes
   useEffect(() => {
     const root = document.documentElement;
     if (isDark) root.classList.add('dark');
@@ -48,7 +46,6 @@ function App() {
     <AuthProvider>
       <ErrorBoundary>
         <Router>
-          {/* Pass dark mode state to Header */}
           <Header isDark={isDark} setIsDark={setIsDark} />
 
           <div className="min-h-[80vh]">
@@ -57,14 +54,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/rooms" element={<Rooms />} />
-              <Route
-                path="/booking"
-                element={
-                  <ProtectedRoute>
-                    <Booking />
-                  </ProtectedRoute>
-                }
-              />
+
+              {/* Payment Pages */}
               <Route
                 path="/checkout"
                 element={
@@ -75,6 +66,8 @@ function App() {
               />
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
+
+              {/* User Dashboard */}
               <Route
                 path="/dashboard/user"
                 element={
@@ -83,6 +76,8 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+
+              {/* Admin Dashboard */}
               <Route
                 path="/dashboard/admin"
                 element={
@@ -91,8 +86,19 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+
+              {/* ✅ Add Room Page */}
+              <Route
+                path="/admin/add-room"
+                element={
+                  <ProtectedRoute adminOnly={true}>
+                    <AddRoomPage />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </div>
+
           <Footer />
           <ToastContainer position="top-right" autoClose={3000} />
         </Router>

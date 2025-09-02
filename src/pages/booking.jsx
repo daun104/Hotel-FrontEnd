@@ -19,11 +19,7 @@ const Booking = () => {
           return;
         }
         const res = await api.get(`/rooms/${roomId}`);
-
-        // ✅ handle both possible response structures
         const roomData = res.data?.data || res.data;
-        console.log("Room API response:", res.data);
-
         setRoom(roomData);
       } catch (error) {
         console.error("Error fetching room:", error);
@@ -51,14 +47,22 @@ const Booking = () => {
         const bookingData = res.data?.data || res.data;
         console.log("Booking created:", bookingData);
 
-        // ✅ Redirect to checkout with bookingId
+        // ✅ If backend returns a Stripe/PayPal redirect link → go there
+        if (bookingData.paymentUrl) {
+          window.location.href = bookingData.paymentUrl;
+          return;
+        }
+
+        // ✅ Otherwise, continue to frontend checkout page
         navigate(`/checkout?bookingId=${bookingData._id}`);
       }
     } catch (error) {
-  console.error("Error creating booking:", error.response?.data || error.message);
-  alert("Failed to create booking. Please try again.");
-}
-
+      console.error(
+        "Error creating booking:",
+        error.response?.data || error.message
+      );
+      alert("Failed to create booking. Please try again.");
+    }
   };
 
   if (loading) return <p>Loading room details...</p>;

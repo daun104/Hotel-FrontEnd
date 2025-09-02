@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react';
+// src/context/authContext.jsx
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../services/api';
 import { toast } from 'react-toastify';
 
@@ -83,3 +84,6 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+// ✅ Hook for consuming auth context
+export const useAuth = () => useContext(AuthContext);

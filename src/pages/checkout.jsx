@@ -23,6 +23,9 @@ const Checkout = () => {
         bookingId,
       });
 
+      // 🔍 Debug log so we can see exactly what the backend sends
+      console.log("Payment response:", data);
+
       const stripe = await stripePromise;
       await stripe.redirectToCheckout({ sessionId: data.id });
     } catch (err) {
