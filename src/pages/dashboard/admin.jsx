@@ -1,11 +1,11 @@
-// src/pages/admin/AdminDashboard.jsx
+
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/admin/Sidebar';
 import DashboardAnalytics from '../../components/admin/DashboardAnalytics';
 import UserSearch from '../../components/admin/UserSearch';
 import RoomsTable from '../../components/admin/RoomsTable';
 import BookingsTable from '../../components/admin/BookingsTable';
-import Configuration from './Configuration'; // ✅ config tab
+import Configuration from '../../components/admin/Configuration'; // ✅ config tab
 import api from '../../services/api';
 import { toast } from 'react-toastify';
 
