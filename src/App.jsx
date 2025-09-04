@@ -17,7 +17,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Checkout from './pages/checkout';
 import Success from './pages/success';
 import Cancel from './pages/cancel';
-import AddRoomPage from './pages/dashboard/AddRoomPage'; // <-- new page
+import AddRoomPage from './pages/dashboard/AddRoomPage';
+import Booking from './pages/Booking'; // <-- ✅ added this
 
 // ProtectedRoute component
 function ProtectedRoute({ children, adminOnly = false }) {
@@ -54,6 +55,16 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/rooms" element={<Rooms />} />
+
+              {/* ✅ Booking Page */}
+              <Route
+                path="/booking"
+                element={
+                  <ProtectedRoute>
+                    <Booking />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Payment Pages */}
               <Route
