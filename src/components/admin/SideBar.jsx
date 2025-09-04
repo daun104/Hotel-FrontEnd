@@ -5,6 +5,7 @@ import {
   UserGroupIcon,
   BuildingOfficeIcon,
   CalendarIcon,
+  Cog6ToothIcon, // ⚙️ new icon
 } from '@heroicons/react/24/outline';
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
@@ -13,6 +14,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     { key: 'search', label: 'Search Users', icon: <UserGroupIcon className="w-5 h-5 mr-2" /> },
     { key: 'rooms', label: 'Rooms', icon: <BuildingOfficeIcon className="w-5 h-5 mr-2" /> },
     { key: 'bookings', label: 'Bookings', icon: <CalendarIcon className="w-5 h-5 mr-2" /> },
+    { key: 'config', label: 'Configuration', icon: <Cog6ToothIcon className="w-5 h-5 mr-2" /> }, // 🔥 new tab
   ];
 
   return (
