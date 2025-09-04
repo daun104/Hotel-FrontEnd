@@ -1,9 +1,11 @@
+// src/pages/admin/AdminDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/admin/Sidebar';
 import DashboardAnalytics from '../../components/admin/DashboardAnalytics';
 import UserSearch from '../../components/admin/UserSearch';
 import RoomsTable from '../../components/admin/RoomsTable';
 import BookingsTable from '../../components/admin/BookingsTable';
+import Configuration from './Configuration'; // ✅ config tab
 import api from '../../services/api';
 import { toast } from 'react-toastify';
 
@@ -36,7 +38,7 @@ const AdminDashboard = () => {
     fetchAll();
   }, []);
 
-  // Pass analytics data to DashboardAnalytics
+  // ---- Analytics calculation ----
   const now = new Date();
   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
@@ -45,20 +47,33 @@ const AdminDashboard = () => {
   const analyticsData = {
     users: {
       thisMonth: users.filter(u => new Date(u.createdAt) >= thisMonthStart).length,
-      lastMonth: users.filter(u => new Date(u.createdAt) >= lastMonthStart && new Date(u.createdAt) <= lastMonthEnd).length,
+      lastMonth: users.filter(
+        u => new Date(u.createdAt) >= lastMonthStart && new Date(u.createdAt) <= lastMonthEnd
+      ).length,
       total: users.length,
     },
     bookings: {
       thisMonth: bookings.filter(b => new Date(b.createdAt) >= thisMonthStart).length,
-      lastMonth: bookings.filter(b => new Date(b.createdAt) >= lastMonthStart && new Date(b.createdAt) <= lastMonthEnd).length,
+      lastMonth: bookings.filter(
+        b => new Date(b.createdAt) >= lastMonthStart && new Date(b.createdAt) <= lastMonthEnd
+      ).length,
       total: bookings.length,
     },
     revenue: {
-      thisMonth: bookings.filter(b => new Date(b.createdAt) >= thisMonthStart && b.status === 'confirmed')
-                          .reduce((sum, b) => sum + (b.room?.price || 0), 0),
-      lastMonth: bookings.filter(b => new Date(b.createdAt) >= lastMonthStart && new Date(b.createdAt) <= lastMonthEnd && b.status === 'confirmed')
-                          .reduce((sum, b) => sum + (b.room?.price || 0), 0),
-      total: bookings.filter(b => b.status === 'confirmed').reduce((sum, b) => sum + (b.room?.price || 0), 0),
+      thisMonth: bookings
+        .filter(b => new Date(b.createdAt) >= thisMonthStart && b.status === 'confirmed')
+        .reduce((sum, b) => sum + (b.room?.price || 0), 0),
+      lastMonth: bookings
+        .filter(
+          b =>
+            new Date(b.createdAt) >= lastMonthStart &&
+            new Date(b.createdAt) <= lastMonthEnd &&
+            b.status === 'confirmed'
+        )
+        .reduce((sum, b) => sum + (b.room?.price || 0), 0),
+      total: bookings
+        .filter(b => b.status === 'confirmed')
+        .reduce((sum, b) => sum + (b.room?.price || 0), 0),
     },
   };
 
@@ -70,10 +85,15 @@ const AdminDashboard = () => {
           <p>Loading...</p>
         ) : (
           <>
-            {activeTab === 'dashboard' && <DashboardAnalytics analytics={analyticsData} />}
-            {activeTab === 'search' && <UserSearch users={users} bookings={bookings} />}
+            {activeTab === 'dashboard' && (
+              <DashboardAnalytics analytics={analyticsData} />
+            )}
+            {activeTab === 'search' && (
+              <UserSearch users={users} bookings={bookings} />
+            )}
             {activeTab === 'rooms' && <RoomsTable rooms={rooms} refresh={fetchAll} />}
             {activeTab === 'bookings' && <BookingsTable bookings={bookings} />}
+            {activeTab === 'config' && <Configuration />} {/* ✅ connected */}
           </>
         )}
       </main>
