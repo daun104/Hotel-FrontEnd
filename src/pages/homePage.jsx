@@ -138,7 +138,7 @@ const HomePage = () => {
                           {room.size} • {room.bedType}
                         </div>
                       </div>
-                      <Badge variant="secondary">${room.price}</Badge>
+                      <Badge variant="secondary">RM{room.price}</Badge>
                     </CardTitle>
                     <CardDescription>
                       {room.capacity} guests • {room.description}
