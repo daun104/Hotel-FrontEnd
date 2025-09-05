@@ -32,8 +32,8 @@ const Rooms = () => {
   const handleFilter = () => {
     let updatedRooms = [...rooms];
     if (filterType) {
-      updatedRooms = updatedRooms.filter((room) =>
-        room.roomType?.toLowerCase().includes(filterType.toLowerCase())
+      updatedRooms = updatedRooms.filter(
+        (room) => room.roomType?.toLowerCase() === filterType.toLowerCase()
       );
     }
     if (minPrice) {
@@ -55,13 +55,20 @@ const Rooms = () => {
 
       {/* 🔍 Filter Section */}
       <div className="flex flex-wrap gap-3 mb-8">
-        <input
-          type="text"
-          placeholder="Filter by room type"
+        {/* Dropdown for room type */}
+        <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="border px-3 py-1 rounded w-40"
-        />
+          className="border px-3 py-1 rounded w-44"
+        >
+          <option value="">All Room Types</option>
+          <option value="Standard">Standard</option>
+          <option value="Deluxe">Deluxe</option>
+          <option value="Suite">Suite</option>
+          <option value="Presidential">Presidential</option>
+        </select>
+
+        {/* Price filters */}
         <input
           type="number"
           placeholder="Min Price"
@@ -85,7 +92,10 @@ const Rooms = () => {
       <div className="grid md:grid-cols-3 gap-6">
         {filteredRooms.length > 0 ? (
           filteredRooms.map((room) => (
-            <Card key={room._id} className="overflow-hidden border rounded-lg shadow-md hover:shadow-xl transition-transform duration-300 hover:-translate-y-2">
+            <Card
+              key={room._id}
+              className="overflow-hidden border rounded-lg shadow-md hover:shadow-xl transition-transform duration-300 hover:-translate-y-2"
+            >
               <div className="relative aspect-video overflow-hidden group">
                 <img
                   src={room.image || "https://via.placeholder.com/400x250"}
@@ -106,7 +116,7 @@ const Rooms = () => {
                       {room.size} • {room.bedType}
                     </div>
                   </div>
-                  <Badge variant="secondary">${room.price}</Badge>
+                  <Badge variant="secondary">RM {room.price}</Badge>
                 </CardTitle>
                 <CardDescription>
                   {room.capacity} guests • {room.description}
