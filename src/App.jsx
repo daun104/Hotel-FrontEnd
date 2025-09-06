@@ -18,7 +18,7 @@ import Checkout from './pages/checkout';
 import Success from './pages/success';
 import Cancel from './pages/cancel';
 import AddRoomPage from './pages/dashboard/AddRoomPage';
-import Booking from './pages/Booking'; // <-- ✅ added this
+import Booking from './pages/booking'; // <-- ✅ added this
 
 // ProtectedRoute component
 function ProtectedRoute({ children, adminOnly = false }) {
