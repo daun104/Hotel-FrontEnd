@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import Sidebar from '../../components/admin/Sidebar';
+import Sidebar from '../../components/admin/SideBar';
 import DashboardAnalytics from '../../components/admin/DashboardAnalytics';
 import UserSearch from '../../components/admin/UserSearch';
 import RoomsTable from '../../components/admin/RoomsTable';
